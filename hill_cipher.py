@@ -25,12 +25,13 @@ def decrypt(key_matrix_inv, cipher_text):
 
     # BUG
     # print(result[0][1], int(result[0][1]))
-    
+    print("Decrypted Matrix\n", result) 
+
     # create empty string for plain text
     plain_text = ""
     # convert result matrix to plain text by using chr()
     for i in range(dimensions):
-        plain_text += chr(int(result[0][i]) % 26 + 65)
+        plain_text += chr(int(round(result[0][i], 0) % 26 + 65))
 
     # return the decrypted plain text
     return plain_text
