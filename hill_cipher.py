@@ -2,10 +2,12 @@ import numpy as np
 import math
 import utils
 
-def encrypt():
-    pass
-
+# decryption function
 def decrypt(key_matrix_inv, cipher_text):
+    """
+    Arguments: key matrix inverse, cipher text
+    Returns: plain text
+    """
     print("Matrix Inverse is: \n", key_matrix_inv)
     dimensions = len(cipher_text)
     
@@ -20,24 +22,17 @@ def decrypt(key_matrix_inv, cipher_text):
 
     # multiply inverse with cipher text matrix
     result = np.array(np.dot(key_matrix_inv, cipher_text_matrix))
-    print(result[0][1], int(result[0][1]))
-    result_new = []
 
-    for i in range(dimensions):
-        print(int(result[0][i]))
-        result_new.append(int(result[0][i]))
-
+    # BUG
+    # print(result[0][1], int(result[0][1]))
+    
+    # create empty string for plain text
     plain_text = ""
-    print(result)
-    # convert result matrix to plain text by using ord()
+    # convert result matrix to plain text by using chr()
     for i in range(dimensions):
-        inc = 65
-        if(result[0][i] == 0.):
-            inc = 65
-        else:
-            inc = 66
-        plain_text += chr((result_new[i] % 26 + 65))
+        plain_text += chr(int(result[0][i]) % 26 + 65)
 
+    # return the decrypted plain text
     return plain_text
 
 if __name__ == "__main__":
@@ -56,10 +51,9 @@ if __name__ == "__main__":
     
     plain_text_matrix = np.array(plain_text_matrix)
     
-    print(plain_text_matrix)
-    plain_text_matrix_T = plain_text_matrix.T
+    print("Plain Text Matrix\n", plain_text_matrix)
 
-    print("Values for the key: ")
+    print("Enter values for the key: ")
 
     # take values for the key matrix
     key_matrix = []
@@ -79,16 +73,16 @@ if __name__ == "__main__":
     # key_matrix_inv = utils.multi_inverse(np.linalg.det(key_matrix), 26) * \
     #        np.matrix(key_matrix).getH()
     # print(np.matrix(key_matrix).getH())
-
+    
+    # calculate key matrix inverse using modulo multiplicative inverse
     key_matrix_inv = np.linalg.inv(np.matrix(key_matrix)) * \
             np.linalg.det(key_matrix) * \
             utils.multi_inverse(np.linalg.det(key_matrix), 26) % 26
-     
-    # print(utils.multi_inverse(np.linalg.det(key_matrix), 26))
-
+        
     print(key_matrix)
 
     print("Inverse Key Matrix: \n", key_matrix_inv)
+    
     result = key_matrix.dot(plain_text_matrix)
      
     print("Cipher Matrix: \n", result)
